@@ -14,8 +14,8 @@ describe 'compilers.js', ->
         # /x (resource) is mounted on /
         { path: '/y', tree: [
           { handler: ['a', 'y'], path: '/' }
-          { handler: ['b', 'y'], path: '/:id' }
-          { handler: ['c', 'y'], path: '/y' }
+          { handler: ['b', 'y'], path: '/z' }
+          { handler: ['c', 'y'], path: '/:id' }
         ] }
       ]
 
@@ -26,6 +26,9 @@ describe 'compilers.js', ->
       result = compileMappings(state, [])
 
       expect(result.root).toEqual { handler: 'x', path: '/' }
+      expect(result.aY).toEqual { handler: ['a', 'y'], path: '/' }
+      expect(result.bY).toEqual { handler: ['b', 'y'], path: '/z' }
+      expect(result.cY).toEqual { handler: ['c', 'y'], path: '/:id' }
 
   describe 'compileRoutes()', ->
     it 'should return a list of compiled routes', ->

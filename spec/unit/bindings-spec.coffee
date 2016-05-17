@@ -63,7 +63,7 @@ describe 'bindings.js', ->
     it 'should call get() as SUPPORTED_ACTIONS say', ->
       @routeMapper.resources '/y'
       expect(@state.get[0]).toEqual '/'
-      expect(@state.get[1]).toEqual { handler: ['y', 'index'] }
+      expect(@state.get[1]).toEqual { handler: ['index', 'y'] }
 
     # TODO: except, only, obj, fn
 
