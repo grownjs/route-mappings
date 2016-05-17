@@ -15,8 +15,5 @@
     "eslint": "^2.7.0",
     "istanbul": "^0.4.3",
     "jasmine-node": "2.0.0-beta4"
-  },
-  "dependencies": {
-    "jasmine-node": "^2.0.0-beta4"
   }
 }
