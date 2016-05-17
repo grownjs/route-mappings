@@ -1,0 +1,22 @@
+{
+  "name": "route-mappings",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "scripts": {
+    "dev": "jasmine-node spec --coffee --verbose --autoTest --watchFolders lib",
+    "dev:lint": "eslint lib",
+    "dev:spec": "jasmine-node spec --coffee --noStackTrace --captureExceptions",
+    "cover": "istanbul cover --root lib --x '**/spec/**' -- jasmine-node --coffee spec",
+    "cover:up": "codecov --file=coverage/lcov.info --disable=gcov -e TRAVIS_NODE_VERSION",
+    "test": "npm run dev:lint && npm run dev:spec"
+  },
+  "devDependencies": {
+    "codecov": "^1.0.1",
+    "eslint": "^2.7.0",
+    "istanbul": "^0.4.3",
+    "jasmine-node": "2.0.0-beta4"
+  },
+  "dependencies": {
+    "jasmine-node": "^2.0.0-beta4"
+  }
+}
