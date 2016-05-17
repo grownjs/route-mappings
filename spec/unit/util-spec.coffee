@@ -38,7 +38,7 @@ describe 'util.js', ->
       expect(toArray(false)).toEqual [false]
       expect(toArray(undefined)).toEqual []
 
-  describe 'normalizeRoute(RegExp, String)', ->
+  describe 'normalizeRoute()', ->
     it 'should normalize a given path with regexp', ->
       # bad usage
       expect(-> normalizeRoute()).toThrow()
