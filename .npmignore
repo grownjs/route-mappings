@@ -1,0 +1,10 @@
+.*
+*~
+*.json
+.DS_Store
+
+.travis.yml
+.gitignore
+
+/node_modules
+/spec
