@@ -56,6 +56,6 @@ describe 'compilers.js', ->
         newPost: { handler: ['posts', 'new'], path: '/admin/posts/new' }
         showPost: { handler: ['posts', 'show'], path: '/admin/posts/:id' }
         editPost: { handler: ['posts', 'edit'], path: '/admin/posts/:id/edit' }
-        indexPostComments: { handler: ['posts', 'comments', 'index'], path: '/admin/posts/:post_id/comments' }
+        postComments: { handler: ['posts', 'comments', 'index'], path: '/admin/posts/:post_id/comments' }
         showPostComment: { handler: ['posts', 'comments', 'show'], path: '/admin/posts/:post_id/comments/:id' }
       }
