@@ -1,64 +1,61 @@
 { compileRoutes, compileMappings } = require('../../lib/compilers')
 
 dummyState =
-  # required for parameterization
-  RESOURCE_KEY: ':id'
   # required for path normalization
   PARAMS_PATTERN: /:(.+?)/g
 
 describe 'compilers.js', ->
-  describe 'compileMappings()', ->
-    it 'should return map of named routes', ->
-      tree = [
-        { handler: 'x', path: '/' }
-        # /x (resource) is mounted on /
-        { path: '/y', tree: [
-          { handler: ['a', 'y'], path: '/' }
-          { handler: ['b', 'y'], path: '/z' }
-          { handler: ['c', 'y'], path: '/:id' }
-        ] }
-      ]
-
-      state = {}
-      state[k] = v for k, v of dummyState
-      state.TREE = tree
-
-      result = compileMappings(state, [])
-
-      expect(result.root).toEqual { handler: 'x', path: '/' }
-      expect(result.aY).toEqual { handler: ['a', 'y'], path: '/' }
-      expect(result.bY).toEqual { handler: ['b', 'y'], path: '/z' }
-      expect(result.cY).toEqual { handler: ['c', 'y'], path: '/:id' }
-
-  describe 'compileRoutes()', ->
-    it 'should return a list of compiled routes', ->
-      tree = [
-        { path: '/' }
-        # /x is mounted on /
-        { path: '/x', tree: [
-          { path: '/' }
-          { path: '/y' }
-          # /z is mounted on /x
-          { path: '/z', tree: [
-            { path: '/' }
-            # /:a is mounted on /x/z
-            { path: '/:a' }
+  beforeEach ->
+    tree = [
+      { handler: 'root', path: '/' }
+      { handler: 'login', path: '/login' }
+      { handler: 'logout', path: '/logout' }
+      { path: '/admin', tree: [
+        { handler: 'admin', path: '/' }
+        { path: '/', tree: [
+          { path: '/posts', tree: [
+            { handler: ['posts', 'new'], path: '/new' }
+            { handler: ['posts', 'show'], path: '/:id' }
+            { handler: ['posts', 'edit'], path: '/:id/edit' },
+            { path: '/:id', tree: [
+              { path: '/comments', tree: [
+                { handler: ['comments', 'index'], path: '/' }
+                { handler: ['comments', 'show'], path: '/:comment_id' }
+              ] }
+            ] }
           ] }
         ] }
+      ] }
+    ]
+
+    @state = {}
+    @state[k] = v for k, v of dummyState
+    @state.TREE = tree
+
+  describe 'compileRoutes()', ->
+    it 'should return a list of flattened routes', ->
+      expect(compileRoutes(@state, [])).toEqual [
+        { handler: 'root', path: '/' }
+        { handler: 'login', path: '/login' }
+        { handler: 'logout', path: '/logout' }
+        { handler: 'admin', path: '/admin' }
+        { handler: ['posts', 'new'], path: '/admin/posts/new' }
+        { handler: ['posts', 'show'], path: '/admin/posts/:id' }
+        { handler: ['posts', 'edit'], path: '/admin/posts/:id/edit' }
+        { handler: ['comments', 'index'], path: '/admin/posts/:id/comments' }
+        { handler: ['comments', 'show'], path: '/admin/posts/:id/comments/:comment_id' }
       ]
 
-      expect(compileRoutes(TREE: tree, [])).toEqual [
-        { path: '/' }
-        { path: '/x' }
-        { path: '/x/y' }
-        { path: '/x/z' }
-        { path: '/x/z/:a' }
-      ]
-
-      expect(compileRoutes(TREE: tree, ['/osom'])).toEqual [
-        { path: '/osom' }
-        { path: '/osom/x' }
-        { path: '/osom/x/y' }
-        { path: '/osom/x/z' }
-        { path: '/osom/x/z/:a' }
-      ]
+  describe 'compileMappings()', ->
+    it 'should return a hash of named routes (flattened)', ->
+      expect(compileMappings(@state, [])).toEqual {
+        root: { handler: 'root', path: '/' }
+        login: { handler: 'login', path: '/login' }
+        logout: { handler: 'logout', path: '/logout' }
+        admin: { handler: 'admin', path: '/admin' }
+        newPost: { handler: ['posts', 'new'], path: '/admin/posts/new' }
+        showPost: { handler: ['posts', 'show'], path: '/admin/posts/:id' }
+        editPost: { handler: ['posts', 'edit'], path: '/admin/posts/:id/edit' }
+        indexComments: { handler: ['comments', 'index'], path: '/admin/posts/:id/comments' }
+        showComment: { handler: ['comments', 'show'], path: '/admin/posts/:id/comments/:comment_id' }
+      }
