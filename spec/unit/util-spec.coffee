@@ -2,7 +2,7 @@
 
 dummyState =
   # required for path normalization
-  PARAMS_PATTERN: /:(.+?)/g
+  PARAMS_PATTERN: /:(\w+)/g
 
 describe 'util.js', ->
   describe 'ucfirst()', ->
@@ -59,4 +59,3 @@ describe 'util.js', ->
       expect(normalizeHandler('/', dummyState)).toEqual { handler: 'index' }
       expect(normalizeHandler('/x', dummyState)).toEqual { handler: 'x' }
       expect(normalizeHandler('/', dummyState, 'y')).toEqual { handler: 'y' }
-      expect(normalizeHandler('/', dummyState, [])).toEqual { tree: [] }

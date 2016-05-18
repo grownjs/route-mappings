@@ -4,7 +4,7 @@ dummyState =
   # required for all tree nodes
   TREE: []
   # required for path normalization
-  PARAMS_PATTERN: /:(.+?)/g
+  PARAMS_PATTERN: /:(\w+)/g
   # required for creating all resources
   SUPPORTED_ACTIONS:
     index: { verb: 'get', path: '/' }
@@ -77,6 +77,6 @@ describe 'bindings.js', ->
       routeMapper.namespace '/z', { tree: [-1] }
 
       expect(state[0]).toEqual '/z'
-      expect(state[1]).toEqual [-1]
+      expect(state[1].tree).toEqual [-1]
 
     # TODO: fn, fn.namespace
