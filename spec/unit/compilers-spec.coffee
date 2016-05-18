@@ -50,7 +50,16 @@ describe 'compilers.js', ->
 
   describe 'compileMappings()', ->
     it 'should return a tree of named routes', ->
-      expect(compileMappings(@state.TREE, @state, [])).toEqual {
+      # remove url() because they can't be comparable
+      removeUrls = (obj) ->
+        for k, v of obj
+          if k is 'url'
+            delete obj[k]
+          else if typeof v is 'object'
+            obj[k] = removeUrls(v)
+        obj
+
+      expect(removeUrls(compileMappings(@state.TREE, @state, []))).toEqual {
         root: { handler: 'root', path: '/' }
         login: { handler: 'login', path: '/login' }
         logout: { handler: 'logout', path: '/logout' }
