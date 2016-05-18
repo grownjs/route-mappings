@@ -18,7 +18,7 @@ describe 'compilers.js', ->
             { handler: ['posts', 'show'], path: '/:id' }
             { handler: ['posts', 'edit'], path: '/:id/edit' },
             { path: '/:id', tree: [
-              { path: '/comments', tree: [
+              { handler: 'posts', path: '/comments', tree: [
                 { handler: ['comments', 'index'], path: '/' }
                 { handler: ['comments', 'show'], path: '/:comment_id' }
               ] }
@@ -42,8 +42,8 @@ describe 'compilers.js', ->
         { handler: ['posts', 'new'], path: '/admin/posts/new' }
         { handler: ['posts', 'show'], path: '/admin/posts/:id' }
         { handler: ['posts', 'edit'], path: '/admin/posts/:id/edit' }
-        { handler: ['comments', 'index'], path: '/admin/posts/:id/comments' }
-        { handler: ['comments', 'show'], path: '/admin/posts/:id/comments/:comment_id' }
+        { handler: ['posts', 'comments', 'index'], path: '/admin/posts/:id/comments' }
+        { handler: ['posts', 'comments', 'show'], path: '/admin/posts/:id/comments/:comment_id' }
       ]
 
   describe 'compileMappings()', ->
@@ -56,6 +56,6 @@ describe 'compilers.js', ->
         newPost: { handler: ['posts', 'new'], path: '/admin/posts/new' }
         showPost: { handler: ['posts', 'show'], path: '/admin/posts/:id' }
         editPost: { handler: ['posts', 'edit'], path: '/admin/posts/:id/edit' }
-        indexComments: { handler: ['comments', 'index'], path: '/admin/posts/:id/comments' }
-        showComment: { handler: ['comments', 'show'], path: '/admin/posts/:id/comments/:comment_id' }
+        indexPostComments: { handler: ['posts', 'comments', 'index'], path: '/admin/posts/:id/comments' }
+        showPostComment: { handler: ['posts', 'comments', 'show'], path: '/admin/posts/:id/comments/:comment_id' }
       }
