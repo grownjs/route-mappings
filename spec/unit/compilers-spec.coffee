@@ -47,15 +47,19 @@ describe 'compilers.js', ->
       ]
 
   describe 'compileMappings()', ->
-    it 'should return a hash of named routes (flattened)', ->
+    it 'should return a tree of named routes', ->
       expect(compileMappings(@state, [])).toEqual {
         root: { handler: 'root', path: '/' }
         login: { handler: 'login', path: '/login' }
         logout: { handler: 'logout', path: '/logout' }
         admin: { handler: 'admin', path: '/admin' }
-        newPost: { handler: ['posts', 'new'], path: '/admin/posts/new' }
-        showPost: { handler: ['posts', 'show'], path: '/admin/posts/:id' }
-        editPost: { handler: ['posts', 'edit'], path: '/admin/posts/:id/edit' }
-        postComments: { handler: ['posts', 'comments', 'index'], path: '/admin/posts/:post_id/comments' }
-        showPostComment: { handler: ['posts', 'comments', 'show'], path: '/admin/posts/:post_id/comments/:id' }
+        posts: {
+          new: { handler: ['posts', 'new'], path: '/admin/posts/new' }
+          show: { handler: ['posts', 'show'], path: '/admin/posts/:id' }
+          edit: { handler: ['posts', 'edit'], path: '/admin/posts/:id/edit' }
+          comments: {
+            index: { handler: ['posts', 'comments', 'index'], path: '/admin/posts/:post_id/comments' }
+            show: { handler: ['posts', 'comments', 'show'], path: '/admin/posts/:post_id/comments/:id' }
+          }
+        }
       }
