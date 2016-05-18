@@ -12,8 +12,9 @@ describe 'compilers.js', ->
       { handler: 'logout', path: '/logout' }
       { path: '/admin', tree: [
         { handler: 'admin', path: '/' }
-        { path: '/', tree: [
+        { handler: 'admin', path: '/', tree: [
           { path: '/posts', tree: [
+            { handler: ['posts', 'index'], path: '/' }
             { handler: ['posts', 'new'], path: '/new' }
             { handler: ['posts', 'show'], path: '/:id' }
             { handler: ['posts', 'edit'], path: '/:id/edit' },
@@ -39,11 +40,12 @@ describe 'compilers.js', ->
         { handler: 'login', path: '/login' }
         { handler: 'logout', path: '/logout' }
         { handler: 'admin', path: '/admin' }
-        { handler: ['posts', 'new'], path: '/admin/posts/new' }
-        { handler: ['posts', 'show'], path: '/admin/posts/:id' }
-        { handler: ['posts', 'edit'], path: '/admin/posts/:id/edit' }
-        { handler: ['posts', 'comments', 'index'], path: '/admin/posts/:post_id/comments' }
-        { handler: ['posts', 'comments', 'show'], path: '/admin/posts/:post_id/comments/:id' }
+        { handler: ['admin', 'posts', 'index'], path: '/admin/posts' }
+        { handler: ['admin', 'posts', 'new'], path: '/admin/posts/new' }
+        { handler: ['admin', 'posts', 'show'], path: '/admin/posts/:id' }
+        { handler: ['admin', 'posts', 'edit'], path: '/admin/posts/:id/edit' }
+        { handler: ['admin', 'posts', 'comments', 'index'], path: '/admin/posts/:post_id/comments' }
+        { handler: ['admin', 'posts', 'comments', 'show'], path: '/admin/posts/:post_id/comments/:id' }
       ]
 
   describe 'compileMappings()', ->
@@ -52,14 +54,18 @@ describe 'compilers.js', ->
         root: { handler: 'root', path: '/' }
         login: { handler: 'login', path: '/login' }
         logout: { handler: 'logout', path: '/logout' }
-        admin: { handler: 'admin', path: '/admin' }
-        posts: {
-          new: { handler: ['posts', 'new'], path: '/admin/posts/new' }
-          show: { handler: ['posts', 'show'], path: '/admin/posts/:id' }
-          edit: { handler: ['posts', 'edit'], path: '/admin/posts/:id/edit' }
-          comments: {
-            index: { handler: ['posts', 'comments', 'index'], path: '/admin/posts/:post_id/comments' }
-            show: { handler: ['posts', 'comments', 'show'], path: '/admin/posts/:post_id/comments/:id' }
+        admin: {
+          handler: 'admin'
+          path: '/admin'
+          posts: {
+            index: { handler: ['admin', 'posts', 'index'], path: '/admin/posts' }
+            new: { handler: ['admin', 'posts', 'new'], path: '/admin/posts/new' }
+            show: { handler: ['admin', 'posts', 'show'], path: '/admin/posts/:id' }
+            edit: { handler: ['admin', 'posts', 'edit'], path: '/admin/posts/:id/edit' }
+            comments: {
+              index: { handler: ['admin', 'posts', 'comments', 'index'], path: '/admin/posts/:post_id/comments' }
+              show: { handler: ['admin', 'posts', 'comments', 'show'], path: '/admin/posts/:post_id/comments/:id' }
+            }
           }
         }
       }
