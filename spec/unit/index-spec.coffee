@@ -28,10 +28,10 @@ describe 'RouteMapper()', ->
         .put('/resetPassword', { to: 'Sessions#resetUpdate', as: 'reset' })
         .post('/resetPassword', { to: 'Sessions#resetCreate', as: 'reset' })
 
-        .resources([
-          '/Users'
-          '/Installations'
-        ])
+        .resources('/Users')
+        .resources('/Installations',
+          RouteMapper()
+            .resources('/Dependencies'))
     )
 
     _ = routeMapper.mappings
@@ -40,9 +40,9 @@ describe 'RouteMapper()', ->
       target[k] = v for k, v of obj when keys.indexOf(k) is -1
       target
 
-    expect(omit(_.root, ['url'])).toEqual { to: 'Home#index', path: '/', verb: 'get' }
-    expect(omit(_.login, ['url'])).toEqual { to: 'Session#create', as: 'login', path: '/login', verb: 'post' }
-    expect(omit(_.logout, ['url'])).toEqual { to: 'Session#destroy', as: 'logout', path: '/logout', verb: 'delete' }
+    expect(omit(_.root, ['url'])).toEqual { to: 'Home#index', path: '/', verb: 'get', as: 'root' }
+    expect(omit(_.login, ['url'])).toEqual { to: 'Session#create', as: 'login', path: '/login', verb: 'post', as: 'login' }
+    expect(omit(_.logout, ['url'])).toEqual { to: 'Session#destroy', as: 'logout', path: '/logout', verb: 'delete', as: 'logout' }
 
     expect(omit(_.reset, ['url'])).toEqual {
       to: 'Sessions#resetCreate'
@@ -59,3 +59,14 @@ describe 'RouteMapper()', ->
     expect(_.InstallationManager.Installations.destroy.path).toEqual '/InstallationManager/Installations/:id'
     expect(_.InstallationManager.Installations.edit.url(123)).toEqual '/InstallationManager/Installations/123/edit'
     expect(_.InstallationManager.Installations.edit.handler).toEqual ['InstallationManager', 'Installations', 'edit']
+
+    routeMapper.routes.forEach (route) ->
+      toHandler = if route.to
+        route.to.split('#')
+      else
+        []
+
+      handler = route.handler or []
+      handler.push(toHandler...) if toHandler
+
+      console.log "#{route.verb.toUpperCase()}     ".substr(0, 8) + route.path + '  ' + handler.join('.') + ' <' + route.as + '>'
