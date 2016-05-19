@@ -40,15 +40,16 @@ describe 'RouteMapper()', ->
       target[k] = v for k, v of obj when keys.indexOf(k) is -1
       target
 
-    expect(omit(_.root, ['url'])).toEqual { handler: 'Home#index', path: '/', verb: 'get', as: 'root' }
-    expect(omit(_.login, ['url'])).toEqual { to: 'Session#create', as: 'login', path: '/login', verb: 'post', as: 'login' }
-    expect(omit(_.logout, ['url'])).toEqual { to: 'Session#destroy', as: 'logout', path: '/logout', verb: 'delete', as: 'logout' }
+    expect(omit(_.root, ['url'])).toEqual { handler: ['Home#index'], path: '/', verb: 'get', as: 'root' }
+    expect(omit(_.login, ['url'])).toEqual { handler: [], to: 'Session#create', as: 'login', path: '/login', verb: 'post', as: 'login' }
+    expect(omit(_.logout, ['url'])).toEqual { handler: [], to: 'Session#destroy', as: 'logout', path: '/logout', verb: 'delete', as: 'logout' }
 
     expect(omit(_.reset, ['url'])).toEqual {
       to: 'Sessions#resetCreate'
       as: 'reset'
       path: '/resetPassword'
       verb: 'post'
+      handler: []
     }
 
     expect(omit(_.InstallationManager.reset, ['url'])).toEqual {
