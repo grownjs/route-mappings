@@ -3,7 +3,7 @@ RouteMapper = require('../lib')
 describe 'RouteMapper()', ->
   it 'should work as defined', ->
     routeMapper = RouteMapper()
-      .get('/', { to: 'Home#index' })
+      .get('/', 'Home#index')
       .get('/login', { to: 'Session#new', as: 'login' })
       .post('/login', { to: 'Session#create', as: 'login' })
       .delete('/logout', { to: 'Session#destroy', as: 'logout' })
@@ -19,7 +19,7 @@ describe 'RouteMapper()', ->
 
     .namespace('/InstallationManager', ->
       return RouteMapper()
-        .get('/', { to: 'Home#index' })
+        .get('/', 'Home#index')
         .get('/login', { to: 'Sessions#new' })
         .post('/login', { to: 'Sessions#create' })
         .delete('/logout', { to: 'Sessions#destroy' })
@@ -40,13 +40,20 @@ describe 'RouteMapper()', ->
       target[k] = v for k, v of obj when keys.indexOf(k) is -1
       target
 
-    expect(omit(_.root, ['url'])).toEqual { to: 'Home#index', path: '/', verb: 'get', as: 'root' }
+    expect(omit(_.root, ['url'])).toEqual { handler: 'Home#index', path: '/', verb: 'get', as: 'root' }
     expect(omit(_.login, ['url'])).toEqual { to: 'Session#create', as: 'login', path: '/login', verb: 'post', as: 'login' }
     expect(omit(_.logout, ['url'])).toEqual { to: 'Session#destroy', as: 'logout', path: '/logout', verb: 'delete', as: 'logout' }
 
     expect(omit(_.reset, ['url'])).toEqual {
       to: 'Sessions#resetCreate'
       as: 'reset'
+      path: '/resetPassword'
+      verb: 'post'
+    }
+
+    expect(omit(_.InstallationManager.reset, ['url'])).toEqual {
+      to: 'Sessions#resetCreate'
+      as: 'InstallationManager.reset'
       path: '/InstallationManager/resetPassword'
       verb: 'post'
       handler: ['InstallationManager']
