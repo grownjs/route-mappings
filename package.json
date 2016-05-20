@@ -2,6 +2,7 @@
   "name": "route-mappings",
   "version": "0.0.0",
   "main": "lib/index.js",
+  "description": "Function factory to create nested definitions of routes, with namespaces and resources support.",
   "scripts": {
     "dev": "jasmine-node spec --coffee --verbose --autoTest --watchFolders lib",
     "dev:lint": "eslint lib",
