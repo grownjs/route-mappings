@@ -75,7 +75,8 @@ describe 'RouteMapper()', ->
   it 'should mount /Installations within /InstallationManager (namespace > resources)', ->
     expect(@urlFor.InstallationManager.Installations.destroy.path).toEqual '/InstallationManager/Installations/:id'
     expect(@urlFor.InstallationManager.Installations.edit.url(123)).toEqual '/InstallationManager/Installations/123/edit'
-    expect(@urlFor.InstallationManager.Installations.edit.handler).toEqual ['InstallationManager', 'Installations', 'edit']
+    expect(@urlFor.InstallationManager.Installations.edit.handler).toEqual ['InstallationManager', 'Installations']
+    expect(@urlFor.InstallationManager.Installations.edit.action).toEqual 'edit'
 
   it 'should mount /Dependencies within /Installations (resources > resources)', ->
     expect(@urlFor.InstallationManager.Installations.Dependencies.edit.path).toEqual '/InstallationManager/Installations/:installation_id/Dependencies/:id/edit'
