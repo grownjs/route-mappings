@@ -70,6 +70,7 @@ describe 'RouteMapper()', ->
   it 'should mount /Users and /Branches on its own namespaces', ->
     expect(@urlFor.Users.path).toEqual '/Users'
     expect(@urlFor.Branches.new.path).toEqual '/Branches/new'
+    expect(@urlFor.Branches.show.path).toEqual '/Branches/:id'
     expect(@urlFor.Branches.edit.path).toEqual '/Branches/:id/edit'
 
   it 'should mount /Installations within /InstallationManager (namespace > resources)', ->
@@ -91,5 +92,6 @@ describe 'RouteMapper()', ->
 
   #     handler = route.handler or []
   #     handler.push(toHandler...) if toHandler
+  #     handler.push(route.action) if route.action
 
   #     console.log "#{route.verb.toUpperCase()}     ".substr(0, 8) + route.path + '  ' + handler.join('.') + ' <' + route.as + '>'
