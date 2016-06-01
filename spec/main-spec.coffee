@@ -21,6 +21,11 @@ describe 'RouteMapper()', ->
         '/Branches'
       ])
 
+      .resources('/Documents', ->
+        return RouteMapper()
+          .resources('/Editions')
+      )
+
       .namespace('/InstallationManager', ->
         return RouteMapper()
           .get('/', 'Home#index')
@@ -82,6 +87,11 @@ describe 'RouteMapper()', ->
   it 'should mount /Dependencies within /Installations (resources > resources)', ->
     expect(@urlFor.InstallationManager.Installations.Dependencies.edit.path).toEqual '/InstallationManager/Installations/:installation_id/Dependencies/:id/edit'
     expect(@urlFor.InstallationManager.Installations.Dependencies.edit.url(1, 2)).toEqual '/InstallationManager/Installations/1/Dependencies/2/edit'
+
+  it 'should provide [Editions] as handler, without nesting (resources > resources)', ->
+    expect(@urlFor.Documents.Editions.edit.path).toEqual '/Documents/:document_id/Editions/:id/edit'
+    expect(@urlFor.Documents.Editions.edit.handler).toEqual ['Editions']
+    expect(@urlFor.Documents.Editions.edit.action).toEqual 'edit'
 
   # it 'should provide all route info within .routes', ->
   #   @routeMapper.routes.forEach (route) ->
