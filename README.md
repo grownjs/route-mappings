@@ -70,6 +70,34 @@ console.log(routeMappings.mappings.articles.edit.url(42));
 
   In fact, a resource is a new RouteMappings instance mounted within the given namespace.
 
+### Nesting support
+
+Consider the following example:
+
+```javascript
+var $ = RouteMappings()
+  .resources('/Parent', function () {
+    return RouteMappings()
+      .resources('/Children');
+  })
+  .namespace('/Section', function () {
+    return RouteMappings()
+      .resources('/Parent', function () {
+        return RouteMappings()
+          .resources('/Children');
+      });
+  }).mappings;
+```
+
+Where:
+
+- `$.Parent.Children.path` will be `/Parent/:parent_id/Children`
+- `$.Parent.Children.handler` will be `['Children']`
+- `$.Section.Parent.Children.path` will be `/Section/Parent/:parent_id/Children`
+- `$.Section.Parent.Children.handler` will be `['Section', 'Children']`
+
+As you can see, nested resources will not carry their parent details when building handlers, only namespaces are taken into account for that.
+
 ## Properties
 
 - `tree: Array` &mdash; Read-only property containing all the route definitions
