@@ -8,7 +8,7 @@ describe 'RouteMapper()', ->
   beforeEach ->
     @routeMapper = RouteMapper()
       .get('/', 'Home#index')
-      .get('/login', { to: 'Session#new', as: 'login' })
+      .get('/login', { to: 'Session#new', as: 'login', x: 'y' })
       .post('/login', { to: 'Session#create', as: 'login' })
       .delete('/logout', { to: 'Session#destroy', as: 'logout' })
 
@@ -23,7 +23,7 @@ describe 'RouteMapper()', ->
 
       .resources('/Documents', ->
         return RouteMapper()
-          .resources('/Editions')
+          .resources('/Editions', { a: 'b' })
       )
 
       .namespace('/InstallationManager', ->
@@ -49,7 +49,7 @@ describe 'RouteMapper()', ->
     expect(omit(@urlFor.root, ['url'])).toEqual { handler: ['Home#index'], path: '/', verb: 'get', as: 'root' }
 
   it 'should mount /login as login', ->
-    expect(omit(@urlFor.login, ['url'])).toEqual { handler: [], to: 'Session#create', as: 'login', path: '/login', verb: 'post', as: 'login' }
+    expect(omit(@urlFor.login, ['url'])).toEqual { handler: [], to: 'Session#create', as: 'login', path: '/login', verb: 'post', as: 'login', x: 'y' }
 
   it 'should mount /logout as logout', ->
     expect(omit(@urlFor.logout, ['url'])).toEqual { handler: [], to: 'Session#destroy', as: 'logout', path: '/logout', verb: 'delete', as: 'logout' }
@@ -92,6 +92,12 @@ describe 'RouteMapper()', ->
     expect(@urlFor.Documents.Editions.edit.path).toEqual '/Documents/:document_id/Editions/:id/edit'
     expect(@urlFor.Documents.Editions.edit.handler).toEqual ['Editions']
     expect(@urlFor.Documents.Editions.edit.action).toEqual 'edit'
+
+  it 'should return all properties from the given object as configuration (simple method)', ->
+    expect(@urlFor.login.x).toEqual 'y'
+
+  it 'should return all properties from the given object as configuration (resource method)', ->
+    expect(@urlFor.Documents.Editions.a).toEqual 'b'
 
   # it 'should provide all route info within .routes', ->
   #   @routeMapper.routes.forEach (route) ->
