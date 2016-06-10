@@ -2,7 +2,7 @@
 
 dummyState =
   # required for path normalization
-  PARAMS_PATTERN: /:(\w+)/g
+  PARAMS_PATTERN: /[:*](\w+)/g
 
 describe 'util.js', ->
   describe 'ucfirst()', ->

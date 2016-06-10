@@ -1,10 +1,10 @@
-{ bindHttpVerbHelper, bindAddRouteHelper, bindResourcesHelper, bindNamespaceHelper } = require('../../lib/bindings')
+{ bindHttpVerbHelper, bindAddRouteHelper, bindResourcesHelper, bindNamespaceHelper, bindMatcherHelper } = require('../../lib/bindings')
 
 dummyState =
   # required for all tree nodes
   TREE: []
   # required for path normalization
-  PARAMS_PATTERN: /:(\w+)/g
+  PARAMS_PATTERN: /[:*](\w+)/g
   # required for creating all resources
   SUPPORTED_ACTIONS:
     index: { verb: 'get', path: '/' }
@@ -80,3 +80,35 @@ describe 'bindings.js', ->
       expect(state[1].tree).toEqual [-1]
 
     # TODO: fn, fn.namespace
+
+  describe 'bindMatcherHelper()', ->
+    it 'should perform basic reverse routing with sorting', ->
+      find = bindMatcherHelper dummyState, [
+        {
+          test: 'Root'
+          route: { path: '/' }
+        },
+        {
+          test: 'Param'
+          route: { path: '/:id' }
+        },
+        {
+          test: 'Star'
+          route: { path: '/*all' }
+        }
+        {
+          test: 'Static'
+          route: { path: '/action' }
+        }
+      ]
+
+      expect(find('')).toEqual []
+      expect(find('/')[0].test).toEqual 'Root'
+      expect(find('/x')[0].test).toEqual 'Star'
+      expect(find('/x')[1].test).toEqual 'Param'
+      expect(find('/x')[1].matcher.values).toEqual ['x']
+
+      expect(find('/x/y')[0].test).toEqual 'Star'
+      expect(find('/action')[0].test).toEqual 'Static'
+      expect(find('/action')[1].test).toEqual 'Star'
+      expect(find('/foo/bar')[0].matcher.values).toEqual ['foo/bar']
