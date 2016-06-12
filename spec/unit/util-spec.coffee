@@ -3,6 +3,7 @@
 dummyState =
   # required for path normalization
   PARAMS_PATTERN: /[:*](\w+)/g
+  PRIVATE_PROPERTIES: ['TREE', 'PARAMS_PATTERN', 'SUPPORTED_ACTIONS', 'PRIVATE_PROPERTIES']
 
 describe 'util.js', ->
   describe 'ucfirst()', ->

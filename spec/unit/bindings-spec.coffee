@@ -9,6 +9,8 @@ dummyState =
   SUPPORTED_ACTIONS:
     index: { verb: 'get', path: '/' }
 
+  PRIVATE_PROPERTIES: ['TREE', 'PARAMS_PATTERN', 'SUPPORTED_ACTIONS', 'PRIVATE_PROPERTIES']
+
 quickClone = (obj, target = {}) ->
   target[k] = v for k, v of obj
   target
