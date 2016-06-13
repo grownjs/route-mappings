@@ -8,9 +8,8 @@ dummyState =
   # required for creating all resources
   SUPPORTED_ACTIONS:
     index: { verb: 'get', path: '/' }
-
+  # required for resources
   RESOURCE_KEY: ':id'
-  PRIVATE_PROPERTIES: ['TREE', 'RESOURCE_KEY', 'PARAMS_PATTERN', 'SUPPORTED_ACTIONS', 'PRIVATE_PROPERTIES']
 
 quickClone = (obj, target = {}) ->
   target[k] = v for k, v of obj
