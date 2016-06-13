@@ -6,11 +6,11 @@ omit = (obj, keys, target = {}) ->
 
 describe 'RouteMapper()', ->
   beforeEach ->
-    @routeMapper = RouteMapper()
+    @routeMapper = RouteMapper({ use: ['app'] })
       .get('/', 'Home#index')
       .get('/login', { to: 'Session#new', as: 'login', x: 'y' })
       .post('/login', { to: 'Session#create', as: 'login' })
-      .delete('/logout', { to: 'Session#destroy', as: 'logout' })
+      .delete('/logout', { to: 'Session#destroy', as: 'logout', use: ['quit'] })
 
       .get('/resetPassword', { to: 'Sessions#resetShow', as: 'reset' })
       .put('/resetPassword', { to: 'Sessions#resetUpdate', as: 'reset' })
@@ -19,17 +19,18 @@ describe 'RouteMapper()', ->
       .resources([
         '/Users'
         '/Branches'
-      ])
+      ], { use: ['abc', 'xyz'] })
 
       .resources('/Documents', ->
         return RouteMapper()
-          .get('/')
-          .get('/Section')
-          .resources('/Editions', { a: 'b' })
+          .get('/', 'Documents#other')
+          .get('/Section', { to: 'Documents#section', use: ['sub'] })
+          .resources('/Editions', { a: 'b', use: ['other'] })
       )
 
-      .namespace('/InstallationManager', ->
-        return RouteMapper()
+      # use inherited routeMapper
+      .namespace('/InstallationManager', (routeMapper) ->
+        return routeMapper({ use: ['extra'] })
           .get('/', 'Home#index')
           .get('/login', { to: 'Sessions#new' })
           .post('/login', { to: 'Sessions#create' })
@@ -39,22 +40,22 @@ describe 'RouteMapper()', ->
           .put('/resetPassword', { to: 'Sessions#resetUpdate', as: 'reset' })
           .post('/resetPassword', { to: 'Sessions#resetCreate', as: 'reset' })
 
-          .resources('/Users')
+          .resources('/Users', { use: ['auth'] })
           .resources('/Installations',
-            RouteMapper()
+            RouteMapper({ use: ['track'] })
               .resources('/Dependencies'))
       )
 
     @urlFor = @routeMapper.mappings
 
   it 'should mount / as root', ->
-    expect(omit(@urlFor.root, ['url'])).toEqual { handler: ['Home#index'], path: '/', verb: 'get', as: 'root' }
+    expect(omit(@urlFor.root, ['url'])).toEqual { handler: ['Home#index'], path: '/', verb: 'get', as: 'root', use: ['app'] }
 
   it 'should mount /login as login', ->
-    expect(omit(@urlFor.login, ['url'])).toEqual { handler: [], to: 'Session#create', as: 'login', path: '/login', verb: 'post', as: 'login', x: 'y' }
+    expect(omit(@urlFor.login, ['url'])).toEqual { handler: [], to: 'Session#create', as: 'login', path: '/login', verb: 'post', as: 'login', x: 'y', use: ['app'] }
 
   it 'should mount /logout as logout', ->
-    expect(omit(@urlFor.logout, ['url'])).toEqual { handler: [], to: 'Session#destroy', as: 'logout', path: '/logout', verb: 'delete', as: 'logout' }
+    expect(omit(@urlFor.logout, ['url'])).toEqual { handler: [], to: 'Session#destroy', as: 'logout', path: '/logout', verb: 'delete', as: 'logout', use: ['app', 'quit'] }
 
   it 'should mount /resetPassword as reset', ->
     expect(omit(@urlFor.reset, ['url'])).toEqual {
@@ -63,6 +64,7 @@ describe 'RouteMapper()', ->
       path: '/resetPassword'
       verb: 'post'
       handler: []
+      use: ['app']
     }
 
   it 'should mount /resetPassword as InstallationManager.reset', ->
@@ -72,12 +74,25 @@ describe 'RouteMapper()', ->
       path: '/InstallationManager/resetPassword'
       verb: 'post'
       handler: ['InstallationManager']
+      use: ['app', 'extra']
     }
 
   it 'should mount routes and resources properly', ->
     expect(@urlFor.Documents.path).toEqual '/Documents'
     expect(@urlFor.Documents.Section.path).toEqual '/Documents/Section'
     expect(@urlFor.Documents.Editions.path).toEqual '/Documents/:document_id/Editions'
+
+  it 'should pass data through all mounted routes properly', ->
+    # passed factories always inherits
+    expect(@urlFor.Users.use).toEqual ['app', 'abc', 'xyz']
+    expect(@urlFor.Branches.use).toEqual ['app', 'abc', 'xyz']
+    expect(@urlFor.InstallationManager.Users.use).toEqual ['app', 'extra', 'auth']
+
+    # while standalone factories does not
+    expect(@urlFor.Documents.use).toEqual ['app']
+    expect(@urlFor.Documents.Section.use).toEqual ['sub']
+    expect(@urlFor.Documents.Editions.use).toEqual ['other']
+    expect(@urlFor.InstallationManager.Installations.Dependencies.use).toEqual ['track']
 
   it 'should mount /Users and /Branches on its own namespaces', ->
     expect(@urlFor.Users.path).toEqual '/Users'
@@ -108,13 +123,8 @@ describe 'RouteMapper()', ->
 
   # it 'should provide all route info within .routes', ->
   #   @routeMapper.routes.forEach (route) ->
-  #     toHandler = if route.to
-  #       route.to.split('#')
-  #     else
-  #       []
-
   #     handler = route.handler or []
-  #     handler.push(toHandler...) if toHandler
+  #     handler.push(route.to) if route.to
   #     handler.push(route.action) if route.action
 
-  #     console.log "#{route.verb.toUpperCase()}     ".substr(0, 8) + route.path + '  ' + handler.join('.') + ' <' + route.as + '>'
+  #     console.log "#{route.verb.toUpperCase()}     ".substr(0, 8) + route.path + '  ' + handler.join('.').replace('#', '.') + ' <' + route.as + '>'
