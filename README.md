@@ -54,6 +54,32 @@ console.log(routeMappings.mappings.articles.edit.url(42));
 
   If you provide your own options don't forget to use `:id` as the `RESOURCE_KEY` is defined, otherwise replacements won't occur.
 
+### More options?
+
+Any additional option found will be copied and stored within the `RouteMapper` instance, then all options will be merged through any defined route on _compilation_ time.
+
+To create another `RouteMapper` instance with all its parent's options you can use the following:
+
+```javascript
+var $ = RouteMapper({ use: ['root'] })
+  .get('/', { as: 'home' })
+  // all factories will receive the same instance
+  .namespace('/admin', function(routeMapper) {
+    return routeMapper({ use: ['auth'] })
+      .resources('/posts');
+  })
+  // using the original factory will not inherit anything
+  .namespace('/articles', function() {
+    return RouteMapper()
+      // resources shall be routeMapper instances too!
+      .resources('/comments', { use: ['other'] });
+  });
+
+$.mappings.home.use; // ['root']
+$.mappings.admin.posts.use; // ['root', 'auth']
+$.mappings.articles.comments.use; // ['other']
+```
+
 ## Methods
 
  - `<http-verb>(path: String, params: Object)` &mdash; Basic method for call any HTTP method, e.g. `get('/', { as: 'root' })`
