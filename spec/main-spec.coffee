@@ -23,6 +23,8 @@ describe 'RouteMapper()', ->
 
       .resources('/Documents', ->
         return RouteMapper()
+          .get('/')
+          .get('/Section')
           .resources('/Editions', { a: 'b' })
       )
 
@@ -71,6 +73,11 @@ describe 'RouteMapper()', ->
       verb: 'post'
       handler: ['InstallationManager']
     }
+
+  it 'should mount routes and resources properly', ->
+    expect(@urlFor.Documents.path).toEqual '/Documents'
+    expect(@urlFor.Documents.Section.path).toEqual '/Documents/Section'
+    expect(@urlFor.Documents.Editions.path).toEqual '/Documents/:document_id/Editions'
 
   it 'should mount /Users and /Branches on its own namespaces', ->
     expect(@urlFor.Users.path).toEqual '/Users'

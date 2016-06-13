@@ -9,7 +9,8 @@ dummyState =
   SUPPORTED_ACTIONS:
     index: { verb: 'get', path: '/' }
 
-  PRIVATE_PROPERTIES: ['TREE', 'PARAMS_PATTERN', 'SUPPORTED_ACTIONS', 'PRIVATE_PROPERTIES']
+  RESOURCE_KEY: ':id'
+  PRIVATE_PROPERTIES: ['TREE', 'RESOURCE_KEY', 'PARAMS_PATTERN', 'SUPPORTED_ACTIONS', 'PRIVATE_PROPERTIES']
 
 quickClone = (obj, target = {}) ->
   target[k] = v for k, v of obj
@@ -60,7 +61,9 @@ describe 'bindings.js', ->
     it 'should call namespace() for mounting', ->
       @routeMapper.resources '/x'
       expect(@state.ns[0]).toEqual '/x'
-      expect(@state.ns[1]).toEqual @routeMapper
+      expect(@state.ns[1]._isResource).toBeTruthy()
+      expect(@state.ns[1]._resourceKey).toEqual ':x_id'
+      expect(@state.ns[1].handler._isResource).toBeTruthy()
 
     it 'should call get() as SUPPORTED_ACTIONS say', ->
       @routeMapper.resources '/y'
