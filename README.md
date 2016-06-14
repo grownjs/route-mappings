@@ -8,7 +8,7 @@ Function factory to create nested definitions of routes, with namespaces and res
 ```javascript
 var RouteMappings = require('route-mappings');
 
-// create a new RouteMapper instance
+// create a new RouteMappings instance
 var routeMappings = RouteMappings()
   .get('/', { to: 'home_handler' })
   .get('/login', { to: 'login_handler' })
@@ -56,28 +56,28 @@ console.log(routeMappings.mappings.articles.edit.url(42));
 
 ### More options?
 
-Any additional option found will be copied and stored within the `RouteMapper` instance, then all options will be merged through any defined route on _compilation_ time.
+Any additional option found will be copied and stored within the `RouteMappings` instance, then all options will be merged through any defined route on _compilation_ time.
 
-To create another `RouteMapper` instance with all its parent's options you can use the following:
+To create another `RouteMappings` instance with all its parent's options you can use the following:
 
 ```javascript
-var $ = RouteMapper({ use: ['root'] })
+var $ = RouteMappings({ use: ['root'] })
   .get('/', { as: 'home' })
   // all factories will receive the same instance
-  .namespace('/admin', function(routeMapper) {
-    return routeMapper({ use: ['auth'] })
+  .namespace('/admin', function(RouteMappings) {
+    return RouteMappings({ use: ['auth'] })
       .resources('/posts');
   })
   // using the original factory will not inherit anything
   .namespace('/articles', function() {
-    return RouteMapper()
-      // resources shall be routeMapper instances too!
+    return RouteMappings()
+      // resources shall be RouteMappings instances too!
       .resources('/comments', { use: ['other'] });
-  });
+  }).mappings;
 
-$.mappings.home.use; // ['root']
-$.mappings.admin.posts.use; // ['root', 'auth']
-$.mappings.articles.comments.use; // ['other']
+$.home.use; // ['root']
+$.admin.posts.use; // ['root', 'auth']
+$.articles.comments.use; // ['other']
 ```
 
 ## Methods
@@ -104,6 +104,7 @@ Consider the following example:
 var $ = RouteMappings()
   .resources('/Parent', function () {
     return RouteMappings()
+      .get('/Section')
       .resources('/Children');
   })
   .namespace('/Section', function () {
@@ -117,12 +118,47 @@ var $ = RouteMappings()
 
 Where:
 
-- `$.Parent.Children.path` will be `/Parent/:parent_id/Children`
+- `$.Parent.Children.path` will be `/parent/:parent_id/children`
 - `$.Parent.Children.handler` will be `['Children']`
-- `$.Section.Parent.Children.path` will be `/Section/Parent/:parent_id/Children`
+- `$.Parent.Section.path` will be `/parent/section`
+- `$.Section.Parent.Children.path` will be `/section/parent/:parent_id/children`
 - `$.Section.Parent.Children.handler` will be `['Section', 'Children']`
 
 As you can see, nested resources will not carry their parent details when building handlers, only namespaces are taken into account for that.
+
+> Paths are normalized to be _human friendly_, all `PascalCase` segments will be mapped as `camel-case`.
+
+### URL _mappings_ support
+
+All `http-verbs` can define its own alias name with `as`, e.g:
+
+```javascript
+var $ = RouteMappings()
+  .get('/', { as: 'myUrl' })
+  .namespace('/Section', function() {
+    return RouteMappings()
+      .get('/:slug')
+      .resources('/Top');
+  }).mappings;
+
+[$.myUrl.verb, $.myUrl.path];
+// ['get', '/']
+
+[$.Section.verb, $.myUrl.path];
+// ['get', '/section/:slug']
+
+[$.Section.Top.verb, $.Section.Top.path];
+// ['get', '/section/top']
+
+[$.Section.Top.update.verb, $.Section.Top.update.path];
+// ['put', '/section/top/:id']
+```
+
+You can access to any defined route through `routeMappings.mappings` property.
+
+> When a route has no alias defined, or, when the route is created automatically (e.g. resources) the alias name will be generated from the its path.
+
+> Casing is preserved from this conversion, e.g. `/SubSection/Page` would map to `/sub-section/page` and `$.SubSection.Page` respectively.
 
 ## Properties
 
