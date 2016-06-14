@@ -126,7 +126,7 @@ Where:
 
 As you can see, nested resources will not carry their parent details when building handlers, only namespaces are taken into account for that.
 
-> Paths are normalized to be _human friendly_, all `PascalCase` segments will be mapped as `camel-case`.
+> Paths are normalized to be _human friendly_, all `PascalCase` segments will be mapped as `pascal-case`.
 
 ### URL _mappings_ support
 
