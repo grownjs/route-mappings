@@ -61,7 +61,7 @@ describe 'RouteMapper()', ->
     expect(omit(@urlFor.reset, ['url'])).toEqual {
       to: 'Sessions#resetCreate'
       as: 'reset'
-      path: '/resetPassword'
+      path: '/reset-password'
       verb: 'post'
       handler: []
       use: ['app']
@@ -71,16 +71,16 @@ describe 'RouteMapper()', ->
     expect(omit(@urlFor.InstallationManager.reset, ['url'])).toEqual {
       to: 'Sessions#resetCreate'
       as: 'InstallationManager.reset'
-      path: '/InstallationManager/resetPassword'
+      path: '/installation-manager/reset-password'
       verb: 'post'
       handler: ['InstallationManager']
       use: ['app', 'extra']
     }
 
   it 'should mount routes and resources properly', ->
-    expect(@urlFor.Documents.path).toEqual '/Documents'
-    expect(@urlFor.Documents.Section.path).toEqual '/Documents/Section'
-    expect(@urlFor.Documents.Editions.path).toEqual '/Documents/:document_id/Editions'
+    expect(@urlFor.Documents.path).toEqual '/documents'
+    expect(@urlFor.Documents.Section.path).toEqual '/documents/section'
+    expect(@urlFor.Documents.Editions.path).toEqual '/documents/:document_id/editions'
 
   it 'should pass data through all mounted routes properly', ->
     # passed factories always inherits
@@ -95,23 +95,23 @@ describe 'RouteMapper()', ->
     expect(@urlFor.InstallationManager.Installations.Dependencies.use).toEqual ['track']
 
   it 'should mount /Users and /Branches on its own namespaces', ->
-    expect(@urlFor.Users.path).toEqual '/Users'
-    expect(@urlFor.Branches.new.path).toEqual '/Branches/new'
-    expect(@urlFor.Branches.show.path).toEqual '/Branches/:id'
-    expect(@urlFor.Branches.edit.path).toEqual '/Branches/:id/edit'
+    expect(@urlFor.Users.path).toEqual '/users'
+    expect(@urlFor.Branches.new.path).toEqual '/branches/new'
+    expect(@urlFor.Branches.show.path).toEqual '/branches/:id'
+    expect(@urlFor.Branches.edit.path).toEqual '/branches/:id/edit'
 
   it 'should mount /Installations within /InstallationManager (namespace > resources)', ->
-    expect(@urlFor.InstallationManager.Installations.destroy.path).toEqual '/InstallationManager/Installations/:id'
-    expect(@urlFor.InstallationManager.Installations.edit.url(123)).toEqual '/InstallationManager/Installations/123/edit'
+    expect(@urlFor.InstallationManager.Installations.destroy.path).toEqual '/installation-manager/installations/:id'
+    expect(@urlFor.InstallationManager.Installations.edit.url(123)).toEqual '/installation-manager/installations/123/edit'
     expect(@urlFor.InstallationManager.Installations.edit.handler).toEqual ['InstallationManager', 'Installations']
     expect(@urlFor.InstallationManager.Installations.edit.action).toEqual 'edit'
 
   it 'should mount /Dependencies within /Installations (resources > resources)', ->
-    expect(@urlFor.InstallationManager.Installations.Dependencies.edit.path).toEqual '/InstallationManager/Installations/:installation_id/Dependencies/:id/edit'
-    expect(@urlFor.InstallationManager.Installations.Dependencies.edit.url(1, 2)).toEqual '/InstallationManager/Installations/1/Dependencies/2/edit'
+    expect(@urlFor.InstallationManager.Installations.Dependencies.edit.path).toEqual '/installation-manager/installations/:installation_id/dependencies/:id/edit'
+    expect(@urlFor.InstallationManager.Installations.Dependencies.edit.url(1, 2)).toEqual '/installation-manager/installations/1/dependencies/2/edit'
 
   it 'should provide [Editions] as handler, without nesting (resources > resources)', ->
-    expect(@urlFor.Documents.Editions.edit.path).toEqual '/Documents/:document_id/Editions/:id/edit'
+    expect(@urlFor.Documents.Editions.edit.path).toEqual '/documents/:document_id/editions/:id/edit'
     expect(@urlFor.Documents.Editions.edit.handler).toEqual ['Editions']
     expect(@urlFor.Documents.Editions.edit.action).toEqual 'edit'
 
