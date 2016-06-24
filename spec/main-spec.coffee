@@ -43,6 +43,7 @@ describe 'RouteMapper()', ->
           .resources('/Users', { use: ['auth'] })
           .resources('/Installations',
             RouteMapper({ use: ['track'] })
+              .put('/:a/:b', { as: 'ab' })
               .resources('/Dependencies'))
       )
 
@@ -81,6 +82,7 @@ describe 'RouteMapper()', ->
     expect(@urlFor.Documents.path).toEqual '/documents'
     expect(@urlFor.Documents.Section.path).toEqual '/documents/section'
     expect(@urlFor.Documents.Editions.path).toEqual '/documents/:document_id/editions'
+    expect(@urlFor.InstallationManager.Installations.ab.path).toEqual '/installation-manager/installations/:a/:b'
 
   it 'should pass data through all mounted routes properly', ->
     # passed factories always inherits
