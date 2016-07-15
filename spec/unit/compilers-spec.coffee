@@ -13,13 +13,13 @@ describe 'compilers.js', ->
         { handler: 'logout', path: '/logout' }
         { path: '/admin', tree: [
           { handler: 'admin', path: '/' }
-          { _parentHandler: 'admin', path: '/', tree: [
+          { path: '/', tree: [
             { path: '/posts', tree: [
               { handler: ['posts', 'index'], path: '/' }
               { handler: ['posts', 'new'], path: '/new' }
               { handler: ['posts', 'show'], path: '/:id' }
               { handler: ['posts', 'edit'], path: '/:id/edit' }
-              { _parentHandler: 'posts', path: '/:post_id', tree: [
+              { path: '/:post_id', tree: [
                 { path: '/comments', tree: [
                   { handler: ['comments', 'index'], path: '/' }
                   { handler: ['comments', 'show'], path: '/:id' }
@@ -30,18 +30,19 @@ describe 'compilers.js', ->
         ] }
       ]
 
-      expect(compileRoutes(input, dummyState, [])).toEqual [
-        { handler: 'root', path: '/' }
-        { handler: 'login', path: '/login' }
-        { handler: 'logout', path: '/logout' }
-        { handler: 'admin', path: '/admin' }
-        { handler: ['admin', 'posts', 'index'], path: '/admin/posts' }
-        { handler: ['admin', 'posts', 'new'], path: '/admin/posts/new' }
-        { handler: ['admin', 'posts', 'show'], path: '/admin/posts/:id' }
-        { handler: ['admin', 'posts', 'edit'], path: '/admin/posts/:id/edit' }
-        { handler: ['admin', 'posts', 'comments', 'index'], path: '/admin/posts/:post_id/comments' }
-        { handler: ['admin', 'posts', 'comments', 'show'], path: '/admin/posts/:post_id/comments/:id' }
-      ]
+      routes = compileRoutes(input, dummyState, [])
+
+      expect(routes[0]).toEqual { handler: 'root', path: '/' }
+      expect(routes[1]).toEqual { handler: 'login', path: '/login' }
+      expect(routes[2]).toEqual { handler: 'logout', path: '/logout' }
+      expect(routes[3]).toEqual { handler: 'admin', path: '/admin' }
+      expect(routes[4]).toEqual { handler: ['posts', 'index'], path: '/admin/posts' }
+      expect(routes[5]).toEqual { handler: ['posts', 'new'], path: '/admin/posts/new' }
+      expect(routes[6]).toEqual { handler: ['posts', 'show'], path: '/admin/posts/:id' }
+      expect(routes[7]).toEqual { handler: ['posts', 'edit'], path: '/admin/posts/:id/edit' }
+      expect(routes[8]).toEqual { handler: ['comments', 'index'], path: '/admin/posts/:post_id/comments' }
+      expect(routes[9]).toEqual { handler: ['comments', 'show'], path: '/admin/posts/:post_id/comments/:id' }
+
 
   describe 'compileKeypaths()', ->
     it 'should generated named paths from flattened routes', ->
@@ -52,12 +53,12 @@ describe 'compilers.js', ->
         { handler: ['admin', 'posts', 'edit'], path: '/admin/posts/:id/edit' }
       ]
 
-      expect(compileKeypaths(input, dummyState)).toEqual [
-        { handler: ['admin', 'posts', 'index'], path: '/admin/posts', as: 'admin.posts' }
-        { handler: ['admin', 'posts', 'new'], path: '/admin/posts/new', as: 'admin.posts.new' }
-        { handler: ['admin', 'posts', 'show'], path: '/admin/posts/:id', as: 'admin.posts.show' }
-        { handler: ['admin', 'posts', 'edit'], path: '/admin/posts/:id/edit', as: 'admin.posts.edit' }
-      ]
+      paths = compileKeypaths(input, dummyState)
+
+      expect(paths[0]).toEqual { handler: ['admin', 'posts', 'index'], path: '/admin/posts', as: 'admin.posts.index' }
+      expect(paths[1]).toEqual { handler: ['admin', 'posts', 'new'], path: '/admin/posts/new', as: 'admin.posts.new' }
+      expect(paths[2]).toEqual { handler: ['admin', 'posts', 'show'], path: '/admin/posts/:id', as: 'admin.posts.show' }
+      expect(paths[3]).toEqual { handler: ['admin', 'posts', 'edit'], path: '/admin/posts/:id/edit', as: 'admin.posts.edit' }
 
   describe 'compileMappings()', ->
     it 'should return a tree of named routes from flattened routes with keypaths', ->
