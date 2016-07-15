@@ -73,4 +73,4 @@ describe 'routeMappings()', ->
 
   it 'should mount /Top/DeepNested/Deepest as `Top.DeepNested.Deepest` => /top/deep-nested/deepest', ->
     expect(@urlFor.Top?.DeepNested?.Deepest?.edit?.handler).toEqual ['Top', 'DeepNested', 'Deepest', 'edit']
-    expect(@urlFor.Top?.DeepNested?.Deepest?.edit?.path).toEqual '/top/:top_id/deep-nested/deepest/:id/edit'
+    expect(@urlFor.Top?.DeepNested?.Deepest?.edit?.path).toEqual '/top/deep-nested/deepest/:id/edit'
