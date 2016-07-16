@@ -55,7 +55,7 @@ describe 'compilers.js', ->
 
       paths = compileKeypaths(input, dummyState)
 
-      expect(paths[0]).toEqual { handler: ['admin', 'posts', 'index'], path: '/admin/posts', as: 'admin.posts.index' }
+      expect(paths[0]).toEqual { handler: ['admin', 'posts', 'index'], path: '/admin/posts', as: 'admin.posts' }
       expect(paths[1]).toEqual { handler: ['admin', 'posts', 'new'], path: '/admin/posts/new', as: 'admin.posts.new' }
       expect(paths[2]).toEqual { handler: ['admin', 'posts', 'show'], path: '/admin/posts/:id', as: 'admin.posts.show' }
       expect(paths[3]).toEqual { handler: ['admin', 'posts', 'edit'], path: '/admin/posts/:id/edit', as: 'admin.posts.edit' }
