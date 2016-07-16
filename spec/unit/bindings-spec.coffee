@@ -40,7 +40,7 @@ describe 'bindings.js', ->
 
     it 'should treat / as index', ->
       @addRoute '/'
-      expect(@state.TREE[0].handler).toEqual ['index']
+      expect(@state.TREE[0].handler).toEqual []
 
   describe 'bindResourcesHelper()', ->
     beforeEach ->
