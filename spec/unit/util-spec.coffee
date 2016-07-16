@@ -56,6 +56,6 @@ describe 'util.js', ->
       expect(-> normalizeHandler('/x//y', dummyState)).toThrow()
 
       # valid ones
-      expect(normalizeHandler('/', dummyState)).toEqual { handler: 'index' }
-      expect(normalizeHandler('/x', dummyState)).toEqual { handler: 'x' }
-      expect(normalizeHandler('/', dummyState, 'y')).toEqual { handler: 'y' }
+      expect(normalizeHandler('/', dummyState)).toEqual { handler: ['index'] }
+      expect(normalizeHandler('/x', dummyState)).toEqual { handler: ['x'] }
+      expect(normalizeHandler('/', dummyState, 'y')).toEqual { handler: ['y'] }
