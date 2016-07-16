@@ -63,9 +63,9 @@ describe 'routeMappings()', ->
     expect(@urlFor.Top?.Sub?.handler).toEqual ['Top', 'Sub']
     expect(@urlFor.Top?.Sub?.path).toEqual '/top/sub'
 
-  it 'should mount /Top/Nested as `Nested` => /top/:top_id/nested', ->
-    expect(@urlFor.Nested?.handler).toEqual ['Nested', 'index']
-    expect(@urlFor.Nested?.path).toEqual '/top/:top_id/nested'
+  it 'should mount /Top/Nested as `Top.Nested` => /top/:top_id/nested', ->
+    expect(@urlFor.Top?.Nested?.handler).toEqual ['Top', 'Nested', 'index']
+    expect(@urlFor.Top?.Nested?.path).toEqual '/top/:top_id/nested'
 
   it 'should mount /Top/DeepNested/Subsub as `Top.DeepNested.Subsub` => /top/deep-nested/subsub', ->
     expect(@urlFor.Top?.DeepNested?.Subsub?.handler).toEqual ['Top', 'DeepNested', 'Subsub']
