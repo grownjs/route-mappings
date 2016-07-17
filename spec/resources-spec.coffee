@@ -8,9 +8,6 @@ describe 'resources()', ->
     expect($.Pages.as).toEqual 'Pages'
     expect($.Pages.path).toEqual '/pages'
     expect($.Pages.handler).toEqual ['Pages', 'index']
-    expect($.Pages._isAction).toEqual true
-    expect($.Pages._actionName).toEqual 'index'
-    expect($.Pages._resourceName).toEqual 'Pages'
 
   it 'should mount nested routes (/Pages => /)', ->
     $ = routeMappings()
@@ -21,9 +18,6 @@ describe 'resources()', ->
     expect($.Pages.as).toEqual 'Pages'
     expect($.Pages.path).toEqual '/pages'
     expect($.Pages.handler).toEqual ['Pages', 'index']
-    expect($.Pages._isAction).toEqual true
-    expect($.Pages._actionName).toEqual 'index'
-    expect($.Pages._resourceName).toEqual 'Pages'
 
   it 'should mount nested routes (/Pages => /Settings)', ->
     $ = routeMappings()
@@ -52,3 +46,19 @@ describe 'resources()', ->
     expect($.Pages.Comments.as).toEqual 'Pages.Comments'
     expect($.Pages.Comments.path).toEqual '/pages/:page_id/comments'
     expect($.Pages.Comments.handler).toEqual ['Pages', 'Comments', 'index']
+
+    # nested resources always carry its :parent_id while forming the final path
+    expect($.Pages.Comments.edit.path).toEqual '/pages/:page_id/comments/:id/edit'
+
+  it 'should mount nested namespaces within resources (/Pages => /Stats => /Comments)', ->
+    $ = routeMappings()
+      .resources('/Pages', (routeMappings) ->
+        routeMappings().namespace('/Stats', (routeMappings) -> routeMappings().resources('/Comments'))
+      ).mappings
+
+    expect($.Pages.Stats.Comments.as).toEqual 'Pages.Stats.Comments'
+    expect($.Pages.Stats.Comments.path).toEqual '/pages/stats/comments'
+    expect($.Pages.Stats.Comments.handler).toEqual ['Pages', 'Stats', 'Comments', 'index']
+
+    # nested resources that aren't immediately related will not carry any :parent_id
+    expect($.Pages.Stats.Comments.edit.path).toEqual '/pages/stats/comments/:id/edit'

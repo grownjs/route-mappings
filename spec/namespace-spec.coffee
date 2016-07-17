@@ -40,3 +40,23 @@ describe 'namespace()', ->
     expect($.Admin.Users.as).toEqual 'Admin.Users'
     expect($.Admin.Users.path).toEqual '/admin/users'
     expect($.Admin.Users.handler).toEqual ['Admin', 'Users', 'index']
+
+  it 'should mount nested namespaces (/Section => /Subsection)', ->
+    $ = routeMappings()
+      .namespace('/Section', (routeMappings) ->
+        routeMappings().namespace('/Subsection', (routeMappings) -> routeMappings().get('/'))
+      ).mappings
+
+    expect($.Section.Subsection.as).toEqual 'Section.Subsection'
+    expect($.Section.Subsection.path).toEqual '/section/subsection'
+    expect($.Section.Subsection.handler).toEqual ['Section', 'Subsection']
+
+  it 'should mount nested resources within namespaces (/Admin => /Pages => /Comments)', ->
+    $ = routeMappings()
+      .namespace('/Admin', (routeMappings) ->
+        routeMappings().resources('/Pages', (routeMappings) -> routeMappings().resources('/Comments'))
+      ).mappings
+
+    expect($.Admin.Pages.Comments.edit.as).toEqual 'Admin.Pages.Comments.edit'
+    expect($.Admin.Pages.Comments.edit.path).toEqual '/admin/pages/:page_id/comments/:id/edit'
+    expect($.Admin.Pages.Comments.edit.handler).toEqual ['Admin', 'Pages', 'Comments', 'edit']
