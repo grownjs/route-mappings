@@ -5,7 +5,6 @@ describe 'resources()', ->
     $ = routeMappings()
       .resources('/Pages', (routeMappings) -> routeMappings().get('/')).mappings
 
-    expect($.Pages.as).toEqual 'Pages'
     expect($.Pages.path).toEqual '/pages'
     expect($.Pages.handler).toEqual ['Pages', 'index']
 
@@ -15,7 +14,6 @@ describe 'resources()', ->
         routeMappings().namespace('/', (routeMappings) -> routeMappings().get('/'))
       ).mappings
 
-    expect($.Pages.as).toEqual 'Pages'
     expect($.Pages.path).toEqual '/pages'
     expect($.Pages.handler).toEqual ['Pages', 'index']
 
@@ -25,7 +23,6 @@ describe 'resources()', ->
         routeMappings().namespace('/', (routeMappings) -> routeMappings().get('/Settings'))
       ).mappings
 
-    expect($.Pages.Settings.as).toEqual 'Pages.Settings'
     expect($.Pages.Settings.path).toEqual '/pages/settings'
     expect($.Pages.Settings.handler).toEqual ['Pages', 'Settings']
 
@@ -35,7 +32,6 @@ describe 'resources()', ->
         routeMappings().namespace('/Settings', (routeMappings) -> routeMappings().get('/'))
       ).mappings
 
-    expect($.Pages.Settings.as).toEqual 'Pages.Settings'
     expect($.Pages.Settings.path).toEqual '/pages/settings'
     expect($.Pages.Settings.handler).toEqual ['Pages', 'Settings']
 
@@ -43,7 +39,6 @@ describe 'resources()', ->
     $ = routeMappings()
       .resources('/Pages', (routeMappings) -> routeMappings().resources('/Comments')).mappings
 
-    expect($.Pages.Comments.as).toEqual 'Pages.Comments'
     expect($.Pages.Comments.path).toEqual '/pages/:page_id/comments'
     expect($.Pages.Comments.handler).toEqual ['Pages', 'Comments', 'index']
 
@@ -56,7 +51,6 @@ describe 'resources()', ->
         routeMappings().namespace('/Stats', (routeMappings) -> routeMappings().resources('/Comments'))
       ).mappings
 
-    expect($.Pages.Stats.Comments.as).toEqual 'Pages.Stats.Comments'
     expect($.Pages.Stats.Comments.path).toEqual '/pages/stats/comments'
     expect($.Pages.Stats.Comments.handler).toEqual ['Pages', 'Stats', 'Comments', 'index']
 

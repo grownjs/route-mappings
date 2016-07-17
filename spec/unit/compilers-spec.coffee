@@ -32,17 +32,35 @@ describe 'compilers.js', ->
 
       routes = compileRoutes(input, dummyState, [])
 
-      expect(routes[0]).toEqual { handler: 'root', path: '/' }
-      expect(routes[1]).toEqual { handler: 'login', path: '/login' }
-      expect(routes[2]).toEqual { handler: 'logout', path: '/logout' }
-      expect(routes[3]).toEqual { handler: 'admin', path: '/admin' }
-      expect(routes[4]).toEqual { handler: ['posts', 'index'], path: '/admin/posts' }
-      expect(routes[5]).toEqual { handler: ['posts', 'new'], path: '/admin/posts/new' }
-      expect(routes[6]).toEqual { handler: ['posts', 'show'], path: '/admin/posts/:id' }
-      expect(routes[7]).toEqual { handler: ['posts', 'edit'], path: '/admin/posts/:id/edit' }
-      expect(routes[8]).toEqual { handler: ['comments', 'index'], path: '/admin/posts/:post_id/comments' }
-      expect(routes[9]).toEqual { handler: ['comments', 'show'], path: '/admin/posts/:post_id/comments/:id' }
+      expect(routes[0].handler).toEqual 'root'
+      expect(routes[0].path).toEqual '/'
 
+      expect(routes[1].handler).toEqual 'login'
+      expect(routes[1].path).toEqual '/login'
+
+      expect(routes[2].handler).toEqual 'logout'
+      expect(routes[2].path).toEqual '/logout'
+
+      expect(routes[3].handler).toEqual 'admin'
+      expect(routes[3].path).toEqual '/admin'
+
+      expect(routes[4].handler).toEqual ['posts', 'index']
+      expect(routes[4].path).toEqual '/admin/posts'
+
+      expect(routes[5].handler).toEqual ['posts', 'new']
+      expect(routes[5].path).toEqual '/admin/posts/new'
+
+      expect(routes[6].handler).toEqual ['posts', 'show']
+      expect(routes[6].path).toEqual '/admin/posts/:id'
+
+      expect(routes[7].handler).toEqual ['posts', 'edit']
+      expect(routes[7].path).toEqual '/admin/posts/:id/edit'
+
+      expect(routes[8].handler).toEqual ['comments', 'index']
+      expect(routes[8].path).toEqual '/admin/posts/:post_id/comments'
+
+      expect(routes[9].handler).toEqual ['comments', 'show']
+      expect(routes[9].path).toEqual '/admin/posts/:post_id/comments/:id'
 
   describe 'compileKeypaths()', ->
     it 'should generated named paths from flattened routes', ->
