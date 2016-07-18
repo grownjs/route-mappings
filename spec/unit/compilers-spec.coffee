@@ -8,11 +8,11 @@ describe 'compilers.js', ->
   describe 'compileRoutes()', ->
     it 'should return a list of flattened routes', ->
       input = [
-        { handler: 'root', path: '/' }
-        { handler: 'login', path: '/login' }
-        { handler: 'logout', path: '/logout' }
+        { handler: ['root'], path: '/' }
+        { handler: ['login'], path: '/login' }
+        { handler: ['logout'], path: '/logout' }
         { path: '/admin', tree: [
-          { handler: 'admin', path: '/' }
+          { handler: ['admin'], path: '/' }
           { path: '/', tree: [
             { path: '/posts', tree: [
               { handler: ['posts', 'index'], path: '/' }
@@ -32,16 +32,16 @@ describe 'compilers.js', ->
 
       routes = compileRoutes(input, dummyState, [])
 
-      expect(routes[0].handler).toEqual 'root'
+      expect(routes[0].handler).toEqual ['root']
       expect(routes[0].path).toEqual '/'
 
-      expect(routes[1].handler).toEqual 'login'
+      expect(routes[1].handler).toEqual ['login']
       expect(routes[1].path).toEqual '/login'
 
-      expect(routes[2].handler).toEqual 'logout'
+      expect(routes[2].handler).toEqual ['logout']
       expect(routes[2].path).toEqual '/logout'
 
-      expect(routes[3].handler).toEqual 'admin'
+      expect(routes[3].handler).toEqual ['admin']
       expect(routes[3].path).toEqual '/admin'
 
       expect(routes[4].handler).toEqual ['posts', 'index']
@@ -61,22 +61,6 @@ describe 'compilers.js', ->
 
       expect(routes[9].handler).toEqual ['comments', 'show']
       expect(routes[9].path).toEqual '/admin/posts/:post_id/comments/:id'
-
-  describe 'compileKeypaths()', ->
-    it 'should generated named paths from flattened routes', ->
-      input = [
-        { handler: ['admin', 'posts', 'index'], path: '/admin/posts' }
-        { handler: ['admin', 'posts', 'new'], path: '/admin/posts/new' }
-        { handler: ['admin', 'posts', 'show'], path: '/admin/posts/:id' }
-        { handler: ['admin', 'posts', 'edit'], path: '/admin/posts/:id/edit' }
-      ]
-
-      paths = compileKeypaths(input, dummyState)
-
-      expect(paths[0]).toEqual { handler: ['admin', 'posts', 'index'], path: '/admin/posts', as: 'admin.posts' }
-      expect(paths[1]).toEqual { handler: ['admin', 'posts', 'new'], path: '/admin/posts/new', as: 'admin.posts.new' }
-      expect(paths[2]).toEqual { handler: ['admin', 'posts', 'show'], path: '/admin/posts/:id', as: 'admin.posts.show' }
-      expect(paths[3]).toEqual { handler: ['admin', 'posts', 'edit'], path: '/admin/posts/:id/edit', as: 'admin.posts.edit' }
 
   describe 'compileMappings()', ->
     it 'should return a tree of named routes from flattened routes with keypaths', ->
