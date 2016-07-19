@@ -30,7 +30,7 @@ describe 'compilers.js', ->
         ] }
       ]
 
-      routes = compileRoutes(input, dummyState, [])
+      routes = compileRoutes(input, [])
 
       expect(routes[0].handler).toEqual ['root']
       expect(routes[0].path).toEqual '/'

@@ -1,12 +1,12 @@
 routeMappings = require('../lib')
 
 describe 'namespace()', ->
-  it 'should map single routes (/ => index)', ->
+  it 'should map single routes (/ => root)', ->
     $ = routeMappings()
       .namespace('/', (routeMappings) -> routeMappings().get('/')).mappings
 
-    expect($.index.path).toEqual '/'
-    expect($.index.handler).toEqual []
+    expect($.root.path).toEqual '/'
+    expect($.root.handler).toEqual []
 
   it 'should map nested routes (/ => /Admin)', ->
     $ = routeMappings()
@@ -53,3 +53,25 @@ describe 'namespace()', ->
 
     expect($.Admin.Pages.Comments.edit.path).toEqual '/admin/pages/:page_id/comments/:id/edit'
     expect($.Admin.Pages.Comments.edit.handler).toEqual ['Admin', 'Pages', 'Comments', 'edit']
+
+  it 'should mount aliased handlers under namespaces through `as` option (/x/y => anythingElse)', ->
+    $ = routeMappings().namespace('/x', { as: 'anythingElse' }, (routeMappings) ->
+      routeMappings().get('/y')).mappings
+
+    # namespaces are not handlers
+    expect($.anythingElse.path).toBeUndefined()
+    expect($.anythingElse.handler).toBeUndefined()
+
+    expect($.anythingElse.y.path).toEqual '/x/y'
+    expect($.anythingElse.y.handler).toEqual ['anythingElse', 'y']
+
+  it 'should support aliased handlers under namespaces too (/x/y => anythingElse.OSOM)', ->
+    $ = routeMappings().namespace('/x', { as: 'anythingElse' }, (routeMappings) ->
+      routeMappings().get('/y', { as: 'OSOM' })).mappings
+
+    # namespaces are not handlers
+    expect($.anythingElse.path).toBeUndefined()
+    expect($.anythingElse.handler).toBeUndefined()
+
+    expect($.anythingElse.OSOM.path).toEqual '/x/y'
+    expect($.anythingElse.OSOM.handler).toEqual ['anythingElse', 'OSOM']

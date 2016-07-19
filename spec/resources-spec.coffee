@@ -56,3 +56,39 @@ describe 'resources()', ->
 
     # nested resources that aren't immediately related will not carry any :parent_id
     expect($.Pages.Stats.Comments.edit.path).toEqual '/pages/stats/comments/:id/edit'
+
+  it 'should mount nested resources using a custom name through `as` option (/X => anythingElse)', ->
+    $ = routeMappings().resources('/X', { as: 'anythingElse' }).mappings#
+
+    expect($.anythingElse.path).toEqual '/x'
+    expect($.anythingElse.handler).toEqual ['anythingElse', 'index']
+
+  it 'should mount aliased handlers under resources through `as` option (/x/y => anythingElse)', ->
+    $ = routeMappings().resources('/X', { as: 'anythingElse' }, (routeMappings) ->
+      routeMappings().get('/y')).mappings
+
+    expect($.anythingElse.path).toEqual '/x'
+    expect($.anythingElse.handler).toEqual ['anythingElse', 'index']
+
+    expect($.anythingElse.y.path).toEqual '/x/y'
+    expect($.anythingElse.y.handler).toEqual ['anythingElse', 'y']
+
+  it 'should support aliased handlers under resources too (/x/y => anythingElse.OSOM)', ->
+    $ = routeMappings().resources('/X', { as: 'anythingElse' }, (routeMappings) ->
+      routeMappings().get('/y', { as: 'OSOM' })).mappings
+
+    expect($.anythingElse.path).toEqual '/x'
+    expect($.anythingElse.handler).toEqual ['anythingElse', 'index']
+
+    expect($.anythingElse.OSOM.path).toEqual '/x/y'
+    expect($.anythingElse.OSOM.handler).toEqual ['anythingElse', 'OSOM']
+
+  it 'should support aliased resources under resources too (/x/y => anythingElse.OSOM)', ->
+    $ = routeMappings().resources('/X', { as: 'anythingElse' }, (routeMappings) ->
+      routeMappings().resources('/Y', { as: 'OSOM' })).mappings
+
+    expect($.anythingElse.path).toEqual '/x'
+    expect($.anythingElse.handler).toEqual ['anythingElse', 'index']
+
+    expect($.OSOM.path).toEqual '/x/:x_id/y'
+    expect($.OSOM.handler).toEqual ['OSOM', 'index']
