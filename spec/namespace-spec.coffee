@@ -75,3 +75,27 @@ describe 'namespace()', ->
 
     expect($.anythingElse.OSOM.path).toEqual '/x/y'
     expect($.anythingElse.OSOM.handler).toEqual ['anythingElse', 'OSOM']
+
+  it 'should mount aliased resources at root, namespaces are nested (/X/Y/Z => Foo => Bar => Baz => Foo/Buzz)', ->
+    $ = routeMappings()
+      .namespace('/X', { as: 'Foo' }, (routeMappings) ->
+        routeMappings()
+          .get('/')
+          .resources('/Y', { as: 'Bar' }, (routeMappings) ->
+            routeMappings().resources('/Z', { as: 'Baz' }))
+          .namespace('/A', { as: 'Buzz' }, (routeMappings) -> routeMappings().get('/'))
+      ).mappings
+
+    # these resources are placed at root
+    expect($.Foo.path).toEqual '/x'
+    expect($.Foo.handler).toEqual ['Foo']
+
+    expect($.Bar.path).toEqual '/x/y'
+    expect($.Bar.handler).toEqual ['Bar', 'index']
+
+    expect($.Baz.path).toEqual '/x/y/:y_id/z'
+    expect($.Baz.handler).toEqual ['Baz', 'index']
+
+    # this namespace is nested properly
+    expect($.Foo.Buzz.path).toEqual '/x/a'
+    expect($.Foo.Buzz.handler).toEqual ['Foo', 'Buzz']
