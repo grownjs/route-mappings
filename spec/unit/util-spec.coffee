@@ -58,4 +58,4 @@ describe 'util.js', ->
       # valid ones
       expect(normalizeHandler('/', dummyState)).toEqual { handler: [] }
       expect(normalizeHandler('/x', dummyState)).toEqual { handler: ['x'] }
-      expect(normalizeHandler('/', dummyState, 'y')).toEqual { handler: ['y'] }
+      expect(normalizeHandler('/', dummyState, 'y')).toEqual { handler: ['y'], _resourceName: 'y' }
