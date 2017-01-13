@@ -1,4 +1,4 @@
-{ ucfirst, pick, omit, toArray, normalizeRoute, normalizeHandler } = require('../../lib/util')
+{ ucfirst, pick, omit, toArray, dasherize, normalizeRoute, normalizeHandler } = require('../../lib/util')
 
 dummyState =
   # required for path normalization
@@ -37,6 +37,13 @@ describe 'util.js', ->
       expect(toArray(-1)).toEqual [-1]
       expect(toArray(false)).toEqual [false]
       expect(toArray(undefined)).toEqual []
+
+  describe 'dasherize()', ->
+    it 'should normalize camel-cased-like words', ->
+      expect(dasherize('ABCDeEfe')).toEqual 'abcde-efe'
+      expect(dasherize('ABC.De.Efe')).toEqual 'abc.de.efe'
+      expect(dasherize('ThisIsANestedController', '/')).toEqual 'this/is/anested/controller'
+      expect(dasherize('This.Is.A.Nested.Controller')).toEqual 'this.is.a.nested.controller'
 
   describe 'normalizeRoute()', ->
     it 'should normalize a given path with regexp', ->
