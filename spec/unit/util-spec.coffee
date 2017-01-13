@@ -42,7 +42,7 @@ describe 'util.js', ->
     it 'should normalize camel-cased-like words', ->
       expect(dasherize('ABCDeEfe')).toEqual 'abcde-efe'
       expect(dasherize('ABC.De.Efe')).toEqual 'abc.de.efe'
-      expect(dasherize('ThisIsANestedController', '/')).toEqual 'this/is/anested/controller'
+      expect(dasherize('ThisIsANestedController')).toEqual 'this-is-anested-controller'
       expect(dasherize('This.Is.A.Nested.Controller')).toEqual 'this.is.a.nested.controller'
 
   describe 'normalizeRoute()', ->

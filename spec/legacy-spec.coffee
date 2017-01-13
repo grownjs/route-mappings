@@ -92,7 +92,7 @@ describe 'RouteMapper()', ->
     expect(@urlFor.InstallationManager.reset.path).toEqual '/installation-manager/reset-password'
     expect(@urlFor.InstallationManager.reset.use).toEqual ['app', 'extra']
 
-    expect(@urlFor.InstallationManager.reset._resourceName).toEqual 'InstallationManager.Sessions'
+    expect(@urlFor.InstallationManager.reset._resourceName).toEqual 'Sessions'
     expect(@urlFor.InstallationManager.reset._actionName).toEqual 'resetCreate'
     expect(@urlFor.InstallationManager.reset._isAction).toBeUndefined()
 
