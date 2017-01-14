@@ -32,3 +32,9 @@ describe 'routeMappings()', ->
     expect($.mappings.Admin.CMS.Pages.edit.path).toEqual '/admin/cms/:cms_id/pages/:id/edit'
     expect($.mappings.Admin.CMS.Pages.Sections.Posts.x.path).toEqual '/admin/cms/:cms_id/pages/sections/posts/:id/x'
     expect($.mappings.Admin.CMS.Pages.Sections.Posts.edit.path).toEqual '/admin/cms/:cms_id/pages/sections/posts/:id/edit'
+
+  it 'should normalize slugs and handler names', ->
+    $ = routeMappings().get('/foo-bar').mappings
+
+    expect($.fooBar).not.toBeUndefined()
+    expect($.fooBar.handler).toEqual ['fooBar']
