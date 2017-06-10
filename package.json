@@ -13,7 +13,9 @@
   },
   "devDependencies": {
     "codecov": "^1.0.1",
-    "eslint": "^2.7.0",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.3.0",
     "istanbul": "^0.4.3",
     "jasmine-node": "2.0.0-beta4"
   },
