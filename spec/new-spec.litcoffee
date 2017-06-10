@@ -45,12 +45,19 @@
 
         it 'can declare mixed routes', ->
           $ = routeMappings()
-            .get('/')
-            .get('/login')
-            .delete('/logout')
+            .get '/'
+            .get '/login'
+            .get '/my-thing'
+            .delete '/logout'
             .namespace '/Admin', (routeMappings) ->
               routeMappings()
-                .resource('/CMS')
-                .resources('/Posts')
+                .resource '/CMS'
+                .resources '/Posts', (routeMappings) ->
+                  routeMappings()
+                    .resources '/Comments'
+                    .namespace '/Assets', (routeMappings) ->
+                      routeMappings()
+                        .resources '/Images'
 
-          console.log $.routes
+          $.routes.forEach (r) ->
+            console.log r.method, r.path, r.handler, r.params
