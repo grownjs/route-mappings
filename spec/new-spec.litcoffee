@@ -42,3 +42,15 @@
 
         it 'returns as mappings', ->
           expect(-> routeMappings().mappings).not.toThrow()
+
+        it 'can declare mixed routes', ->
+          $ = routeMappings()
+            .get('/')
+            .get('/login')
+            .delete('/logout')
+            .namespace '/Admin', (routeMappings) ->
+              routeMappings()
+                .resource('/CMS')
+                .resources('/Posts')
+
+          console.log $.routes
