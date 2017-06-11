@@ -46,9 +46,11 @@
         it 'can declare mixed routes', ->
           $ = routeMappings()
             .get '/'
-            .get '/login'
-            .post '/login'
-            .delete '/logout'
+            .namespace '/', (routeMappings) ->
+              routeMappings()
+                .get '/login'
+                .post '/login'
+                .delete '/logout'
             .namespace '/Admin', (routeMappings) ->
               routeMappings()
                 .resource '/CMS'
@@ -64,6 +66,7 @@
           expect(-> m('x.y')).toThrow()
           expect(m('login.url')).toEqual '/login'
           expect(m('login.path')).toEqual '/login'
+          expect(m('login.handler')).toEqual ['login']
 
           expect(-> routeMappings().get('/', ->)).toThrow()
 

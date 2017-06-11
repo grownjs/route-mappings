@@ -49,39 +49,39 @@ describe 'RouteMapper()', ->
   it 'should mount / as `root`', ->
     expect(@urlFor.root.handler).toEqual ['Home', 'index']
     expect(@urlFor.root.path).toEqual '/'
-    expect(@urlFor.root.method).toEqual 'GET'
-    expect(@urlFor.root.params.use).toEqual ['app']
+    expect(@urlFor.root.verb).toEqual 'GET'
+    expect(@urlFor.root.use).toEqual ['app']
 
   it 'should mount /login as `doLogin`', ->
     expect(@urlFor.doLogin.handler).toEqual ['Session', 'create']
     expect(@urlFor.doLogin.path).toEqual '/login'
-    expect(@urlFor.doLogin.method).toEqual 'POST'
-    expect(@urlFor.doLogin.params.use).toEqual ['app']
-    expect(@urlFor.doLogin.params.p).toEqual 'q'
+    expect(@urlFor.doLogin.verb).toEqual 'POST'
+    expect(@urlFor.doLogin.use).toEqual ['app']
+    expect(@urlFor.doLogin.p).toEqual 'q'
 
     expect(@urlFor.showLogin.handler).toEqual ['Session', 'new']
     expect(@urlFor.showLogin.path).toEqual '/login'
-    expect(@urlFor.showLogin.method).toEqual 'GET'
-    expect(@urlFor.showLogin.params.use).toEqual ['app']
-    expect(@urlFor.showLogin.params.x).toEqual 'y'
+    expect(@urlFor.showLogin.verb).toEqual 'GET'
+    expect(@urlFor.showLogin.use).toEqual ['app']
+    expect(@urlFor.showLogin.x).toEqual 'y'
 
   it 'should mount /logout as `doLogout`', ->
     expect(@urlFor.doLogout.handler).toEqual ['Session', 'destroy']
     expect(@urlFor.doLogout.path).toEqual '/logout'
-    expect(@urlFor.doLogout.method).toEqual 'DELETE'
-    expect(@urlFor.doLogout.params.use).toEqual ['app', 'quit']
-    expect(@urlFor.doLogout.params.x).toBeUndefined()
-    expect(@urlFor.doLogout.params.p).toBeUndefined()
+    expect(@urlFor.doLogout.verb).toEqual 'DELETE'
+    expect(@urlFor.doLogout.use).toEqual ['app', 'quit']
+    expect(@urlFor.doLogout.x).toBeUndefined()
+    expect(@urlFor.doLogout.p).toBeUndefined()
 
   it 'should mount /resetPassword as `doReset`', ->
     expect(@urlFor.doReset.handler).toEqual ['Sessions', 'resetUpdate']
     expect(@urlFor.doReset.path).toEqual '/reset-password'
-    expect(@urlFor.doReset.params.use).toEqual ['app']
+    expect(@urlFor.doReset.use).toEqual ['app']
 
   it 'should mount /InstallationManager/resetPassword as `InstallationManager.reset`', ->
     expect(@urlFor.InstallationManager.reset.handler).toEqual ['InstallationManager', 'Sessions', 'resetCreate']
     expect(@urlFor.InstallationManager.reset.path).toEqual '/installation-manager/reset-password'
-    expect(@urlFor.InstallationManager.reset.params.use).toEqual ['extra']
+    expect(@urlFor.InstallationManager.reset.use).toEqual ['extra']
 
   it 'should mount routes and resources properly', ->
     expect(@urlFor.Documents.path).toEqual '/documents'
@@ -91,15 +91,15 @@ describe 'RouteMapper()', ->
 
   it 'should pass data through all mounted routes properly', ->
     # passed factories always inherits
-    expect(@urlFor.Users.params.use).toEqual ['app', 'abc', 'xyz']
-    expect(@urlFor.Branches.params.use).toEqual ['app', 'abc', 'xyz']
+    expect(@urlFor.Users.use).toEqual ['app', 'abc', 'xyz']
+    expect(@urlFor.Branches.use).toEqual ['app', 'abc', 'xyz']
 
     # while standalone factories does not
-    expect(@urlFor.Documents.params.use).toEqual ['app']
-    expect(@urlFor.Documents.Section.params.use).toEqual ['sub']
-    expect(@urlFor.Documents.Editions.params.use).toEqual ['other']
-    expect(@urlFor.InstallationManager.Users.params.use).toEqual ['extra', 'auth']
-    expect(@urlFor.InstallationManager.Installations.Dependencies.params.use).toEqual ['track']
+    expect(@urlFor.Documents.use).toEqual ['app']
+    expect(@urlFor.Documents.Section.use).toEqual ['sub']
+    expect(@urlFor.Documents.Editions.use).toEqual ['other']
+    expect(@urlFor.InstallationManager.Users.use).toEqual ['extra', 'auth']
+    expect(@urlFor.InstallationManager.Installations.Dependencies.use).toEqual ['track']
 
   it 'should mount /Users and /Branches on its own namespaces', ->
     expect(@urlFor.Users.path).toEqual '/users'
@@ -122,7 +122,7 @@ describe 'RouteMapper()', ->
     expect(@urlFor.Documents.Editions.edit.handler).toEqual ['Documents', 'Editions', 'edit']
 
   it 'should return all properties from the given object as configuration (simple method)', ->
-    expect(@urlFor.doLogin.params.p).toEqual 'q'
+    expect(@urlFor.doLogin.p).toEqual 'q'
 
   it 'should return all properties from the given object as configuration (resource method)', ->
-    expect(@urlFor.Documents.Editions.params.a).toEqual 'b'
+    expect(@urlFor.Documents.Editions.a).toEqual 'b'
