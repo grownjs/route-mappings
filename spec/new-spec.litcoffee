@@ -71,12 +71,10 @@
 
           expect(-> routeMappings().get('/', ->)).toThrow()
 
-          expect(m.Admin.Posts.resource).toEqual 'Posts'
-
-          # path-names are leave untouched
-          expect(m.Admin.Cats.show.resource).toEqual 'Cats'
-
-          expect(m.Admin.Images.destroy.resource).toEqual 'Posts.Images'
+          # all resources are singular
+          expect(m.Admin.Posts.resource).toEqual 'Post'
+          expect(m.Admin.Cats.show.resource).toEqual 'Cat'
+          expect(m.Admin.Images.destroy.resource).toEqual 'Post.Image'
 
         it 'precompile routes as matchers', ->
           $ = routeMappings()
