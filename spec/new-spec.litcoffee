@@ -72,7 +72,10 @@
           expect(-> routeMappings().get('/', ->)).toThrow()
 
           expect(m.Admin.Posts.resource).toEqual 'Posts'
-          expect(m.Admin.Cats.show.resource).toEqual 'Cat'
+
+          # path-names are leave untouched
+          expect(m.Admin.Cats.show.resource).toEqual 'Cats'
+
           expect(m.Admin.Images.destroy.resource).toEqual 'Posts.Images'
 
         it 'precompile routes as matchers', ->
