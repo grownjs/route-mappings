@@ -54,6 +54,7 @@
             .namespace '/Admin', (routeMappings) ->
               routeMappings()
                 .resource '/CMS'
+                .resource '/Cats'
                 .resources '/Posts', (routeMappings) ->
                   routeMappings()
                     .resources '/Comments', as: 'Admin.Comments'
@@ -69,6 +70,10 @@
           expect(m('login.handler')).toEqual ['login']
 
           expect(-> routeMappings().get('/', ->)).toThrow()
+
+          expect(m.Admin.Posts.resource).toEqual 'Posts'
+          expect(m.Admin.Cats.show.resource).toEqual 'Cat'
+          expect(m.Admin.Images.destroy.resource).toEqual 'Posts.Images'
 
         it 'precompile routes as matchers', ->
           $ = routeMappings()
