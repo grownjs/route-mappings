@@ -114,3 +114,18 @@
 
           expect(m('/a/b/c', 1).path).toEqual '/*x/*y/*z'
           expect(m('/x/y/z', 1).path).toEqual '/x/*y'
+
+        it 'will store parent relationships', ->
+          $ = routeMappings()
+            .get '/'
+            .namespace '/admin', ->
+              routeMappings()
+                .get '/:page'
+                .namespace '/db', ->
+                  routeMappings()
+                    .resources '/users'
+
+          expect($.mappings.admin.db.users.edit.keypath).toEqual [
+            'admin.db',
+            'admin.db.users',
+          ]
