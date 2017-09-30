@@ -75,6 +75,7 @@
           expect(m.Admin.Posts.resource).toEqual 'Post'
           expect(m.Admin.Cats.show.resource).toEqual 'Cat'
           expect(m.Admin.Images.destroy.resource).toEqual 'Post.Image'
+          expect(m.Admin.Images.destroy.path).toEqual '/admin/posts/:post_id/assets/images/:id'
 
         it 'precompile routes as matchers', ->
           $ = routeMappings()
@@ -129,3 +130,10 @@
             'admin.db',
             'admin.db.users',
           ]
+
+        it 'can set custom placeholders', ->
+          $ = routeMappings(placeholder: 'foo')
+            .resources('/Example', { only: ['edit'] })
+            .mappings
+
+          expect($.Example.edit.path).toEqual '/example/:foo/edit'
