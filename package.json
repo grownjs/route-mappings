@@ -12,14 +12,14 @@
     "test": "npm run dev:lint && npm run dev:spec"
   },
   "devDependencies": {
-    "codecov": "^1.0.1",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "^11.2.0",
+    "codecov": "^3.0.0",
+    "eslint": "^4.10.0",
+    "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.3.0",
     "istanbul": "^0.4.3",
     "jasmine-node": "2.0.0-beta4"
   },
   "dependencies": {
-    "pluralize": "^2.0.0"
+    "pluralize": "^7.0.0"
   }
 }
