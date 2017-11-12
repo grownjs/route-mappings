@@ -69,7 +69,7 @@
           expect(m('login.path')).toEqual '/login'
           expect(m('login.handler')).toEqual ['login']
 
-          expect(-> routeMappings().get('/', ->)).toThrow()
+          expect(-> routeMappings().get('/', ->)).not.toThrow()
 
           # all resources are singular
           expect(m.Admin.Posts.resource).toEqual 'Post'
