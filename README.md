@@ -210,4 +210,4 @@ routeMappings.routes.forEach(function(route) {
 });
 ```
 
-Made with &hearts; at [Empathia](http://empathia.agency/)
+Made with &hearts; <!-- at [Empathia](http://empathia.agency/) -->
