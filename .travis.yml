@@ -1,14 +1,12 @@
 language: node_js
 node_js:
-  - 0.10
-  - 0.12
   - 4
   - 6
-  - 7
-  - iojs
+  - 9
+  - 11
 script:
-  - 'npm run cover'
+  - 'npm run test:ci'
 after_success:
-  - 'npm run cover:up'
+  - 'npm run codecov'
 notifications:
   email: false
