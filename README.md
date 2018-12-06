@@ -1,5 +1,6 @@
 # RouteMappings
 
+[![NPM version](https://badge.fury.io/js/route-mappings.png)](http://badge.fury.io/js/route-mappings)
 [![travis-ci](https://api.travis-ci.org/pateketrueke/route-mappings.svg)](https://travis-ci.org/pateketrueke/route-mappings)
 [![codecov](https://codecov.io/gh/pateketrueke/route-mappings/branch/master/graph/badge.svg)](https://codecov.io/gh/pateketrueke/route-mappings)
 
