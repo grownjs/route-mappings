@@ -127,5 +127,13 @@ describe('routeMappings()', () => {
 
       expect($.Example.edit.path).to.eql('/example/:foo/edit');
     });
+
+    it('should inherit any options from parents', () => {
+      const $ = routeMappings()
+        .namespace('/', { lookup: '%Ctrl' }, group => group()
+          .get('/health', { to: 'Test.getOK' }));
+
+      expect($.mappings.health.lookup).to.eql('%Ctrl');
+    });
   });
 });
