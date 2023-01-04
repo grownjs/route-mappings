@@ -29,7 +29,7 @@
     "eslint-plugin-import": "^2.14.0",
     "yargs-parser": ">=13.1.2",
     "minimist": ">=0.2.1",
-    "mocha": "^6.2.1",
+    "mocha": "^10.2.0",
     "nyc": "^14.1.1"
   },
   "dependencies": {
