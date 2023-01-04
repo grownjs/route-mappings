@@ -135,5 +135,12 @@ describe('routeMappings()', () => {
 
       expect($.mappings.health.lookup).to.eql('%Ctrl');
     });
+
+    it('should allow non-path params', () => {
+      const $ = routeMappings()
+        .get('/foo.:bar', { to: 'Test.OSOM', as: 'foo' });
+
+      expect($.mappings.foo.url(['42'])).to.eql('/foo.42');
+    });
   });
 });
